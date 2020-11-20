@@ -4,13 +4,19 @@
     xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
     <services>
         <defaults public="false" />
+        
+        <service id="Kematjaya\HiddenTypeBundle\DataTransformer\ObjectToIdTransformer" class="Kematjaya\HiddenTypeBundle\DataTransformer\ObjectToIdTransformer">
+            <argument type="service" id="service_container" />
+        </service> 
         <service id="Kematjaya\HiddenTypeBundle\Type\HiddenEntityType" class="Kematjaya\HiddenTypeBundle\Type\HiddenEntity">
             <argument type="service" id="Doctrine\Persistence\ManagerRegistry" />
             <tag name="form.type"/>
         </service>
-        <!--<service id="Kematjaya\Currency\Lib\CurrencyFormat" class="Kematjaya\Currency\Lib\CurrencyFormat">
-            <argument type="service" id="service_container" />
+        <service id="Kematjaya\HiddenTypeBundle\Type\HiddenDateTimeType" class="Kematjaya\HiddenTypeBundle\Type\HiddenDateTimeType">
+            <tag name="form.type"/>
         </service>
+        
+        <!-- <argument type="service" id="doctrine" />
         <service id="Kematjaya\Currency\Converter\ConverterInterface" class="Kematjaya\Currency\Converter\IndonesianConverter"></service>  
         <service id="kematjaya.currency_format" alias="Kematjaya\Currency\Lib\CurrencyFormat" public="true"></service>
         <service id="kematjaya.currency.converter" alias="Kematjaya\Currency\Converter\ConverterInterface" public="true"></service>
