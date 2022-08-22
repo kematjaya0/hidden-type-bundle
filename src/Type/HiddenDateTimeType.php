@@ -21,6 +21,7 @@ class HiddenDateTimeType extends HiddenType implements DataTransformerInterface
 
     /**
     * {@inheritdoc}
+    * @return mixed Description
     */
     public function transform($data = null)
     {
@@ -29,6 +30,7 @@ class HiddenDateTimeType extends HiddenType implements DataTransformerInterface
 
     /**
     * {@inheritdoc}
+    * @return mixed Description
     */
     public function reverseTransform($data)
     {
@@ -39,6 +41,10 @@ class HiddenDateTimeType extends HiddenType implements DataTransformerInterface
         }
     }
 
+    /**
+     * 
+     * @return string
+     */
     public function getName()
     {
         return 'hidden_datetime';

@@ -2,6 +2,7 @@
     "name": "kematjaya/hidden-type-bundle",
     "type": "library",
     "license": "MIT",
+    "description": "form type for hidden values",
     "authors": [
         {
             "name": "Nur Hidayatullah",

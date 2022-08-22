@@ -53,6 +53,10 @@ class HiddenEntityType extends HiddenType
         return HiddenType::class;
     }
     
+    /**
+     * 
+     * @return string
+     */
     public function getName()
     {
         return 'hidden_entity';
