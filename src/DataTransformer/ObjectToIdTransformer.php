@@ -9,7 +9,7 @@ use Exception;
  */
 class ObjectToIdTransformer extends Transformer
 {
-    public function reverseTransform($id) 
+    public function reverseTransform(mixed $id) :mixed
     {
         if ($id === null) {
             return null;
@@ -30,7 +30,7 @@ class ObjectToIdTransformer extends Transformer
         return $result;
     }
 
-    public function transform($entity) 
+    public function transform(mixed $entity) :mixed
     {
         if ($entity === null) {
             return null;

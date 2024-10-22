@@ -23,7 +23,7 @@ class HiddenDateTimeType extends HiddenType implements DataTransformerInterface
     * {@inheritdoc}
     * @return mixed Description
     */
-    public function transform($data = null)
+    public function transform(mixed $data):mixed
     {
         return (!is_null($data) and $data instanceof \DateTimeInterface) ? $data->format("Y-m-d H:i:s"): date("Y-m-d H:i:s");
     }
@@ -32,7 +32,7 @@ class HiddenDateTimeType extends HiddenType implements DataTransformerInterface
     * {@inheritdoc}
     * @return mixed Description
     */
-    public function reverseTransform($data)
+    public function reverseTransform(mixed $data):mixed
     {
         try {
             return new \DateTime($data);
