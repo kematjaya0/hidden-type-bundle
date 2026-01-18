@@ -22,7 +22,7 @@ class HiddenEntityType extends HiddenType
     /**
     * {@inheritdoc}
     */
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options):void
     {
         $transformer = new ObjectToIdTransformer(
             $this->registry,
@@ -58,7 +58,7 @@ class HiddenEntityType extends HiddenType
      * 
      * @return string
      */
-    public function getName()
+    public function getName():string
     {
         return 'hidden_entity';
     }

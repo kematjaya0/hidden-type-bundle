@@ -14,7 +14,7 @@ class HiddenDateTimeType extends HiddenType implements DataTransformerInterface
     /**
     * {@inheritdoc}
     */
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options):void
     {
         $builder->addModelTransformer($this);
     }
@@ -45,7 +45,7 @@ class HiddenDateTimeType extends HiddenType implements DataTransformerInterface
      * 
      * @return string
      */
-    public function getName()
+    public function getName():string
     {
         return 'hidden_datetime';
     }

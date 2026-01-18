@@ -52,3 +52,5 @@ composer.lock
 # Embedded web-server pid file
 /.web-server-pid
 /nbproject
+composer.lock
+.idea
