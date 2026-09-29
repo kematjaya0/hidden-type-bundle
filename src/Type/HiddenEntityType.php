@@ -13,6 +13,12 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class HiddenEntityType extends HiddenType
 {
+    /**
+     *
+     * @var ManagerRegistry
+     */
+    private $registry;
+    
     public function __construct(ManagerRegistry $registry)
     {
         $this->registry = $registry;
@@ -21,12 +27,13 @@ class HiddenEntityType extends HiddenType
     /**
     * {@inheritdoc}
     */
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $transformer = new ObjectToIdTransformer(
             $this->registry,
             $options['class'],
-            $options['property']
+            $options['property'] ?? 'id',
+            $options['multiple']
         );
         
         $builder->addModelTransformer($transformer);
@@ -57,7 +64,7 @@ class HiddenEntityType extends HiddenType
      * 
      * @return string
      */
-    public function getName()
+    public function getName(): string
     {
         return 'hidden_entity';
     }

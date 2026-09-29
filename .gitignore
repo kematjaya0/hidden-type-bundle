@@ -52,3 +52,6 @@ composer.lock
 # Embedded web-server pid file
 /.web-server-pid
 /nbproject
+
+.phpunit.result.cache
+.idea
