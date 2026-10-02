@@ -5,21 +5,21 @@ namespace Kematjaya\HiddenTypeBundle\Tests\Model;
 /**
  * @author Nur Hidayatullah <kematjaya0@gmail.com>
  */
-class TestFormModel 
+class TestFormModel
 {
-    private $object;
+    private ?ObjectTest $object = null;
 
-    private $created_at;
-    
-    function getCreatedAt() :?\DateTimeInterface
+    private ?\DateTimeInterface $created_at = null;
+
+    public function getCreatedAt(): ?\DateTimeInterface
     {
         return $this->created_at;
     }
 
-    function setCreatedAt(\DateTimeInterface $createdAt): self 
+    public function setCreatedAt(\DateTimeInterface $createdAt): self
     {
         $this->created_at = $createdAt;
-        
+
         return $this;
     }
 
@@ -31,7 +31,7 @@ class TestFormModel
     public function setObject(?ObjectTest $object): self
     {
         $this->object = $object;
-        
+
         return $this;
     }
 }

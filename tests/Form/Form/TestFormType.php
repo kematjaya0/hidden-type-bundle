@@ -2,14 +2,13 @@
 
 namespace Kematjaya\HiddenTypeBundle\Tests\Form\Form;
 
-use Kematjaya\HiddenTypeBundle\Type\HiddenDateTimeType;
-use Kematjaya\HiddenTypeBundle\Type\HiddenEntityType;
 use Kematjaya\HiddenTypeBundle\Tests\Model\ObjectTest;
 use Kematjaya\HiddenTypeBundle\Tests\Model\TestFormModel;
+use Kematjaya\HiddenTypeBundle\Type\HiddenDateTimeType;
+use Kematjaya\HiddenTypeBundle\Type\HiddenEntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-
 
 /**
  * @author Nur Hidayatullah <kematjaya0@gmail.com>

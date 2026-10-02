@@ -2,32 +2,29 @@
 
 namespace Kematjaya\HiddenTypeBundle\Tests\Form\Form;
 
-use Symfony\Component\Form\Test\TypeTestCase;
-use Symfony\Component\Form\PreloadedExtension;
-use Kematjaya\HiddenTypeBundle\Tests\Model\TestFormModel;
-use Kematjaya\HiddenTypeBundle\Type\HiddenEntityType;
-use Kematjaya\HiddenTypeBundle\Type\HiddenDateTimeType;
-use Kematjaya\HiddenTypeBundle\Tests\Model\ObjectTest;
-use Doctrine\Persistence\ObjectRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\Persistence\ObjectRepository;
+use Kematjaya\HiddenTypeBundle\Tests\Model\ObjectTest;
+use Kematjaya\HiddenTypeBundle\Tests\Model\TestFormModel;
+use Kematjaya\HiddenTypeBundle\Type\HiddenDateTimeType;
+use Kematjaya\HiddenTypeBundle\Type\HiddenEntityType;
+use PHPUnit\Framework\MockObject\MockObject;
+use Symfony\Component\Form\FormError;
+use Symfony\Component\Form\FormErrorIterator;
+use Symfony\Component\Form\PreloadedExtension;
+use Symfony\Component\Form\Test\TypeTestCase;
 
 /**
  * @author Nur Hidayatullah <kematjaya0@gmail.com>
  */
 class HiddenEntityTypeTest extends TypeTestCase
 {
-    
     /**
-     *
      * @var ManagerRegistry
      */
-    private $registry;
+    private MockObject $registry;
 
-    /**
-     *
-     * @var ObjectTest
-     */
-    private $testObject;
+    private ObjectTest $testObject;
 
     protected function setUp(): void
     {
@@ -35,12 +32,8 @@ class HiddenEntityTypeTest extends TypeTestCase
 
         // mock any dependencies
         $objectRepository = $this->createMock(ObjectRepository::class);
-        $objectRepository->method('findOneBy')->willReturnCallback(function (array $criteria) use ($object) {
-            return $criteria === ['name' => 'test'] ? $object : null;
-        });
-        $objectRepository->method('findBy')->willReturnCallback(function (array $criteria) use ($object) {
-            return in_array('test', $criteria['name'], true) ? [$object] : [];
-        });
+        $objectRepository->method('findOneBy')->willReturnCallback(fn(array $criteria): ?ObjectTest => $criteria === ['name' => 'test'] ? $object : null);
+        $objectRepository->method('findBy')->willReturnCallback(fn(array $criteria): array => in_array('test', $criteria['name'], true) ? [$object] : []);
 
         $this->registry = $this->createConfiguredMock(ManagerRegistry::class, [
             'getRepository' => $objectRepository,
@@ -50,7 +43,7 @@ class HiddenEntityTypeTest extends TypeTestCase
 
         parent::setUp();
     }
-    
+
     protected function getExtensions(): array
     {
         $type = new HiddenEntityType($this->registry);
@@ -59,15 +52,15 @@ class HiddenEntityTypeTest extends TypeTestCase
             new PreloadedExtension([$type, $dateType], []),
         ];
     }
-    
+
     public function testSubmitValidData(): void
     {
         $formData = [
-            'object' => 'test', 'created_at' => (new \DateTime())->format('Y-m-d H:i:s')
+            'object' => 'test', 'created_at' => (new \DateTime())->format('Y-m-d H:i:s'),
         ];
 
         $data = new TestFormModel();
-        
+
         $form = $this->factory->create(TestFormType::class, $data);
         $form->submit($formData);
 
@@ -94,7 +87,7 @@ class HiddenEntityTypeTest extends TypeTestCase
         self::assertTrue($form->isSubmitted());
         self::assertFalse($form->isValid());
         self::assertFalse($form->get('object')->isSynchronized());
-        $messages = array_map(fn ($error) => $error->getMessage(), iterator_to_array($form->getErrors(true)));
+        $messages = array_map(fn(FormError|FormErrorIterator $error): string => $error->getMessage(), iterator_to_array($form->getErrors(true)));
         self::assertContains('The object does not exist.', $messages);
         self::assertNull($data->getObject());
     }

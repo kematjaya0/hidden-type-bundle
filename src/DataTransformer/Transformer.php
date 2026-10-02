@@ -2,47 +2,24 @@
 
 namespace Kematjaya\HiddenTypeBundle\DataTransformer;
 
-use Symfony\Component\Form\DataTransformerInterface;
 use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\Persistence\ObjectRepository;
+use Exception;
+use Symfony\Component\Form\DataTransformerInterface;
 use Symfony\Component\PropertyInfo\Extractor\ReflectionExtractor;
 use Symfony\Component\PropertyInfo\PropertyInfoExtractor;
-use Exception;
 
 /**
  * @author Nur Hidayatullah <kematjaya0@gmail.com>
  */
 abstract class Transformer implements DataTransformerInterface
 {
-    /**
-     *
-     * @var ManagerRegistry
-     */
-    protected $registry;
-    
-    /**
-     *
-     * @var string
-     */
-    protected $class;
-    
-    /**
-     *
-     * @var string
-     */
-    protected $property;
-    
     public function __construct(
-        ManagerRegistry $registry,
-        string $class,
-        string $property = 'id'
+        protected readonly ManagerRegistry $registry,
+        protected readonly string $class,
+        protected readonly string $property = 'id'
     ) {
-        $this->registry = $registry;
-        $this->class    = $class;
-        $this->property = $property;
-        
         $this->validate();
-
     }
 
     protected function getRepository(): ObjectRepository

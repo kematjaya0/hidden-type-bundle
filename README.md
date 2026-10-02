@@ -57,5 +57,5 @@ $builder
 
 ## Test
 ```
-sh docker/test.sh all
+sh ../test.sh hidden-type-bundle all
 ```

@@ -2,28 +2,19 @@
 
 namespace Kematjaya\HiddenTypeBundle\Type;
 
+use Doctrine\Persistence\ManagerRegistry;
 use Kematjaya\HiddenTypeBundle\DataTransformer\ObjectToIdTransformer;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Doctrine\Persistence\ManagerRegistry;
 
 /**
  * @author Nur Hidayatullah <kematjaya0@gmail.com>
  */
 class HiddenEntityType extends HiddenType
 {
-    /**
-     *
-     * @var ManagerRegistry
-     */
-    private $registry;
-    
-    public function __construct(ManagerRegistry $registry)
-    {
-        $this->registry = $registry;
-    }
-    
+    public function __construct(private readonly ManagerRegistry $registry) {}
+
     /**
     * {@inheritdoc}
     */
@@ -35,10 +26,10 @@ class HiddenEntityType extends HiddenType
             $options['property'] ?? 'id',
             $options['multiple']
         );
-        
+
         $builder->addModelTransformer($transformer);
     }
-    
+
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setRequired(['class']);
@@ -54,16 +45,12 @@ class HiddenEntityType extends HiddenType
         $resolver->setAllowedTypes('property', ['null', 'string']);
         $resolver->setAllowedTypes('multiple', ['boolean']);
     }
-    
+
     public function getParent(): string
     {
         return HiddenType::class;
     }
-    
-    /**
-     * 
-     * @return string
-     */
+
     public function getName(): string
     {
         return 'hidden_entity';
