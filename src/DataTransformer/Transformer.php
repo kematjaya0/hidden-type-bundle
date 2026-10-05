@@ -2,12 +2,11 @@
 
 namespace Kematjaya\HiddenTypeBundle\DataTransformer;
 
-use Symfony\Component\Form\DataTransformerInterface;
 use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\Persistence\ObjectRepository;
+use Symfony\Component\Form\DataTransformerInterface;
 use Symfony\Component\PropertyInfo\Extractor\ReflectionExtractor;
 use Symfony\Component\PropertyInfo\PropertyInfoExtractor;
-use Exception;
 
 /**
  * @author Nur Hidayatullah <kematjaya0@gmail.com>
@@ -15,34 +14,14 @@ use Exception;
 abstract class Transformer implements DataTransformerInterface
 {
     /**
-     *
-     * @var ManagerRegistry
+     * @param class-string $class
      */
-    protected $registry;
-    
-    /**
-     *
-     * @var string
-     */
-    protected $class;
-    
-    /**
-     *
-     * @var string
-     */
-    protected $property;
-    
     public function __construct(
-        ManagerRegistry $registry,
-        string $class,
-        string $property = 'id'
+        protected ManagerRegistry $registry,
+        protected string $class,
+        protected string $property = 'id',
     ) {
-        $this->registry = $registry;
-        $this->class    = $class;
-        $this->property = $property;
-        
         $this->validate();
-
     }
 
     protected function getRepository(): ObjectRepository
@@ -65,14 +44,11 @@ abstract class Transformer implements DataTransformerInterface
 
     protected function validate(): void
     {
-        $reflectionExtractor = new ReflectionExtractor();
-        $propertyInfo        = new PropertyInfoExtractor([$reflectionExtractor]);
-
+        $propertyInfo = new PropertyInfoExtractor([new ReflectionExtractor()]);
         $properties = $propertyInfo->getProperties($this->class) ?? [];
 
-        if (! in_array($this->property, $properties, true)) {
-            throw new Exception(sprintf('property %s is missing in class %s', $this->property, $this->class));
+        if (!\in_array($this->property, $properties, true)) {
+            throw new \Exception(sprintf('property %s is missing in class %s', $this->property, $this->class));
         }
     }
-
 }

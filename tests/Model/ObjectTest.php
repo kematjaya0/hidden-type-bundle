@@ -5,19 +5,19 @@ namespace Kematjaya\HiddenTypeBundle\Tests\Model;
 /**
  * @author Nur Hidayatullah <kematjaya0@gmail.com>
  */
-class ObjectTest 
+class ObjectTest
 {
-    private $name;
-    
-    public function getName():?string
+    private ?string $name = null;
+
+    public function getName(): ?string
     {
         return $this->name;
     }
-    
-    public function setName(string $name):self
+
+    public function setName(string $name): self
     {
         $this->name = $name;
-        
+
         return $this;
     }
 }

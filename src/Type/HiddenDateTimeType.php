@@ -2,50 +2,48 @@
 
 namespace Kematjaya\HiddenTypeBundle\Type;
 
-use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\DataTransformerInterface;
-use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\Exception\TransformationFailedException;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
+use Symfony\Component\Form\FormBuilderInterface;
+
 /**
+ * Hidden field holding a datetime; an empty value means "now".
+ *
  * @author Nur Hidayatullah <kematjaya0@gmail.com>
  */
 class HiddenDateTimeType extends HiddenType implements DataTransformerInterface
 {
-    /**
-    * {@inheritdoc}
-    */
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public const FORMAT = 'Y-m-d H:i:s';
+
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder->addModelTransformer($this);
     }
 
-    /**
-    * {@inheritdoc}
-    * @return mixed Description
-    */
-    public function transform(mixed $data):mixed
+    public function transform(mixed $data): mixed
     {
-        return (!is_null($data) and $data instanceof \DateTimeInterface) ? $data->format("Y-m-d H:i:s"): date("Y-m-d H:i:s");
+        return $data instanceof \DateTimeInterface ? $data->format(self::FORMAT) : date(self::FORMAT);
     }
 
-    /**
-    * {@inheritdoc}
-    * @return mixed Description
-    */
-    public function reverseTransform(mixed $data):mixed
+    public function reverseTransform(mixed $data): mixed
     {
+        if (null === $data || '' === $data) {
+            $data = 'now';
+        }
+
+        if (!\is_string($data)) {
+            throw new TransformationFailedException('Expected a string.');
+        }
+
         try {
             return new \DateTime($data);
         } catch (\Exception $e) {
-            throw new TransformationFailedException($e->getMessage());
+            throw new TransformationFailedException($e->getMessage(), 0, $e);
         }
     }
 
-    /**
-     * 
-     * @return string
-     */
-    public function getName()
+    public function getName(): string
     {
         return 'hidden_datetime';
     }

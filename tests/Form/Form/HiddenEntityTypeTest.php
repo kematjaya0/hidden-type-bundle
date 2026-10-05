@@ -2,32 +2,28 @@
 
 namespace Kematjaya\HiddenTypeBundle\Tests\Form\Form;
 
-use Symfony\Component\Form\Test\TypeTestCase;
-use Symfony\Component\Form\PreloadedExtension;
-use Kematjaya\HiddenTypeBundle\Tests\Model\TestFormModel;
-use Kematjaya\HiddenTypeBundle\Type\HiddenEntityType;
-use Kematjaya\HiddenTypeBundle\Type\HiddenDateTimeType;
-use Kematjaya\HiddenTypeBundle\Tests\Model\ObjectTest;
-use Doctrine\Persistence\ObjectRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\Persistence\ObjectRepository;
+use Kematjaya\HiddenTypeBundle\Tests\Model\ObjectTest;
+use Kematjaya\HiddenTypeBundle\Tests\Model\TestFormModel;
+use Kematjaya\HiddenTypeBundle\Type\HiddenDateTimeType;
+use Kematjaya\HiddenTypeBundle\Type\HiddenEntityType;
+use PHPUnit\Framework\MockObject\MockObject;
+use Symfony\Component\Form\PreloadedExtension;
+use Symfony\Component\Form\Test\TypeTestCase;
 
 /**
  * @author Nur Hidayatullah <kematjaya0@gmail.com>
  */
 class HiddenEntityTypeTest extends TypeTestCase
 {
-    
     /**
      *
      * @var ManagerRegistry
      */
-    private $registry;
+    private MockObject $registry;
 
-    /**
-     *
-     * @var ObjectTest
-     */
-    private $testObject;
+    private ObjectTest $testObject;
 
     protected function setUp(): void
     {
@@ -35,7 +31,7 @@ class HiddenEntityTypeTest extends TypeTestCase
 
         // mock any dependencies
         $objectRepository = $this->createConfiguredMock(ObjectRepository::class, [
-            'findOneBy' => $object
+            'findOneBy' => $object,
         ]);
 
         $this->registry = $this->createConfiguredMock(ManagerRegistry::class, [
@@ -46,7 +42,7 @@ class HiddenEntityTypeTest extends TypeTestCase
 
         parent::setUp();
     }
-    
+
     protected function getExtensions(): array
     {
         $type = new HiddenEntityType($this->registry);
@@ -55,15 +51,15 @@ class HiddenEntityTypeTest extends TypeTestCase
             new PreloadedExtension([$type, $dateType], []),
         ];
     }
-    
+
     public function testSubmitValidData(): void
     {
         $formData = [
-            'object' => 'test', 'created_at' => (new \DateTime())->format('Y-m-d H:i:s')
+            'object' => 'test', 'created_at' => (new \DateTime())->format('Y-m-d H:i:s'),
         ];
 
         $data = new TestFormModel();
-        
+
         $form = $this->factory->create(TestFormType::class, $data);
         $form->submit($formData);
 

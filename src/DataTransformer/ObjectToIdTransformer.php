@@ -3,47 +3,40 @@
 namespace Kematjaya\HiddenTypeBundle\DataTransformer;
 
 use Symfony\Component\PropertyAccess\PropertyAccess;
-use Exception;
+
 /**
  * @author Nur Hidayatullah <kematjaya0@gmail.com>
  */
 class ObjectToIdTransformer extends Transformer
 {
-    public function reverseTransform(mixed $id) :mixed
+    public function reverseTransform(mixed $id): mixed
     {
-        if ($id === null) {
+        if (null === $id) {
             return null;
         }
 
-        $repo     = $this->getRepository();
-        $property = $this->getProperty();
-        $class    = $this->getClass();
-
-        $result = $repo->findOneBy([
-            $property => $id,
+        $result = $this->getRepository()->findOneBy([
+            $this->getProperty() => $id,
         ]);
-        
-        if ($result === null) {
-            throw new Exception(sprintf('Can\'t find entity of class "%s" with property "%s" = "%s".', $class, $property, $id));
+
+        if (null === $result) {
+            throw new \Exception(sprintf('Can\'t find entity of class "%s" with property "%s" = "%s".', $this->getClass(), $this->getProperty(), $id));
         }
 
         return $result;
     }
 
-    public function transform(mixed $entity) :mixed
+    public function transform(mixed $entity): mixed
     {
-        if ($entity === null) {
+        if (null === $entity) {
             return null;
         }
 
         $accessor = PropertyAccess::createPropertyAccessor();
-        $property = $this->getProperty();
-        
-        if (! $accessor->isReadable($entity, $property)) {
+        if (!$accessor->isReadable($entity, $this->getProperty())) {
             return null;
         }
 
-        return $accessor->getValue($entity, $property);
+        return $accessor->getValue($entity, $this->getProperty());
     }
-
 }
